@@ -36,6 +36,7 @@ defmodule Hello.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:credo, "~> 1.0.0", only: [:dev, :test], runtime: false},
       {:ecto_sql, "~> 3.1"},
       {:postgrex, ">= 0.0.0"},
       {:jason, "~> 1.0"}

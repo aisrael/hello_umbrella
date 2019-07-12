@@ -15,6 +15,8 @@ defmodule HelloWeb.ConnCase do
 
   use ExUnit.CaseTemplate
 
+  alias Ecto.Adapters.SQL.Sandbox
+
   using do
     quote do
       # Import conveniences for testing with connections
@@ -27,10 +29,10 @@ defmodule HelloWeb.ConnCase do
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Hello.Repo)
+    :ok = Sandbox.checkout(Hello.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(Hello.Repo, {:shared, self()})
+      Sandbox.mode(Hello.Repo, {:shared, self()})
     end
 
     {:ok, conn: Phoenix.ConnTest.build_conn()}

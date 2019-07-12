@@ -4,8 +4,14 @@ defmodule Hello.Umbrella.MixProject do
   def project do
     [
       apps_path: "apps",
+      version: "0.1",
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      deps: deps(),
+      releases: [
+        prod: [
+          applications: [hello: :permanent, hello_web: :permanent]
+        ]
+      ]
     ]
   end
 

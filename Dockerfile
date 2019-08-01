@@ -1,3 +1,4 @@
+
 # The version of Alpine to use for the final image
 ARG ALPINE_VERSION=3.9
 
@@ -15,7 +16,7 @@ ARG SKIP_PHOENIX=false
 # If you are using an umbrella project, you can change this
 # argument to the directory the Phoenix app is in so that the assets
 # can be built
-ARG PHOENIX_SUBDIR=apps/hello_web
+ARG PHOENIX_SUBDIR=apps/cpt_web
 
 ENV SKIP_PHOENIX=${SKIP_PHOENIX} \
     APP_NAME=${APP_NAME} \
@@ -42,22 +43,23 @@ COPY mix.exs mix.lock ./
 COPY config config
 COPY apps apps
 
-RUN mix deps.get
-RUN mix deps.compile
+RUN mix deps.get --only production
 
 # This step builds assets for the Phoenix app (if there is one)
 # If you aren't building a Phoenix app, pass `--build-arg SKIP_PHOENIX=true`
 # This is mostly here for demonstration purposes
 RUN if [ ! "$SKIP_PHOENIX" = "true" ]; then \
+    mix deps.clean --all && \
+    mix deps.get --only prod && \
     cd ${PHOENIX_SUBDIR}/assets && \
     yarn install && \
     yarn deploy && \
     cd .. && \
-    mix phx.digest; \
+    mix phx.digest.clean; \
     fi
 
 COPY rel rel
-RUN mix release
+RUN MIX_ENV=${MIX_ENV} mix release
 
 # From this line onwards, we're in a new image, which will be the image used in production
 FROM alpine:${ALPINE_VERSION}

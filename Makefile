@@ -1,6 +1,6 @@
 .PHONY: help
 
-APP_NAME ?= `grep 'app:' apps/cpt/mix.exs | sed -e 's/\[//g' -e 's/ //g' -e 's/app://' -e 's/[:,]//g'`
+APP_NAME ?= `grep 'app:' apps/hello/mix.exs | sed -e 's/\[//g' -e 's/ //g' -e 's/app://' -e 's/[:,]//g'`
 APP_VSN ?= `grep 'version:' mix.exs | cut -d '"' -f2`
 BUILD ?= `git rev-parse --short HEAD`
 ALPINE_VERSION ?= '3.9'
